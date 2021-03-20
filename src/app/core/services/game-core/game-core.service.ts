@@ -26,19 +26,19 @@ export class GameCoreService {
 
   constructor() { }
 
-  public initGame(words: Array<PickedWord>): string {
+  public initGame(words: Array<PickedWord>): PickedWord {
     let i: number = this.getRandomInt(words.length);
     this.pickedWord = words[i];
     console.log('Yay you\'re smart:', this.pickedWord.word)
-    return this.pickedWord.word;
+    return this.pickedWord;
   }
 
   private getRandomInt(max: number): number {
     return Math.floor(Math.random() * Math.floor(max));
   }
-
-  public getEncryptWord(): string {
-    return this.encryptedWord
+  
+  public getEncryptedWord(): string {
+    return this.encryptedWord;
   }
   public setEncryptWord(): string {
     this.encryptedWord = this.pickedWord.word.replace(/[a-zA-Z]/g, '_');
@@ -61,9 +61,7 @@ export class GameCoreService {
   }
 
 
-  public getEncryptedWord(): string {
-    return this.encryptedWord;
-  }
+
   public getAttempt(): number {
     return this.attempts;
 

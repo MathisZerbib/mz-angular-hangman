@@ -19,17 +19,21 @@ export class GameComponent implements OnInit {
   encryptedWord: string = "";
   attempts: number = 0;
   fails: number = 0;
-  isGameStopped: boolean = this.gameCoreService.isGameStopped();
-  resultGameStatus: string = this.gameCoreService.resultGameStatus();
+  // isGameStopped: boolean = this.gameCoreService.isGameStopped();
+  // resultGameStatus: string = this.gameCoreService.resultGameStatus();
+  
+  isGameStopped = () => {
+    return this.fails >= 6 || this.encryptedWord.indexOf('_') === -1;
+  }
+  resultGameStatus = () => {
+    return this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf('_') === -1 ? "You win !" : "";
+  };
 
   form = this.fb.group({
     "letterForm": new FormControl('', [Validators.minLength(1), Validators.required])
   });
   constructor(private apiService: ApiService, private gameCoreService: GameCoreService, private fb: FormBuilder) {
-    this.encryptedWord = this.gameCoreService.getEncryptedWord();
-    this.attempts = this.gameCoreService.getAttempt();
-    this.fails = this.gameCoreService.getFail();
-    this.pickedWord = this.gameCoreService.pickedWord;
+
    }
   ngOnInit() {
    
@@ -37,8 +41,12 @@ export class GameComponent implements OnInit {
       this.words = response;
       this.gameCoreService.initGame(this.words);
       this.gameCoreService.setEncryptWord();
+      this.attempts = this.gameCoreService.getAttempt();
+      this.fails = this.gameCoreService.getFail();
+      this.pickedWord = this.gameCoreService.pickedWord;  
+      this.encryptedWord = this.gameCoreService.getEncryptedWord();
     });
-  }
+  };
   
   public onSubmit() {
     if (this.guessLetter) {
@@ -57,10 +65,13 @@ export class GameComponent implements OnInit {
   // }
 
   public resetGame() {
-    this.gameCoreService.initGame(this.words);
-    this.gameCoreService.reset();
+    this.pickedWord = this.gameCoreService.initGame(this.words);
+    this.encryptedWord = this.gameCoreService.setEncryptWord();
     this.form.value.letterForm = "";
-    this.gameCoreService.getEncryptWord();
+    console.log(this.encryptedWord, "This encrypted words")
+    console.log('Reset Game:', this.form.value.letterForm)
+    this.fails = 0;
+    this.attempts = 0;
     this.form.reset();
     this.form.enable();
 
@@ -73,6 +84,7 @@ export class GameComponent implements OnInit {
 
 
   private guessLetter() {
+    console.log("This form value", this.form.value.letterForm)
     this.form.value.letterForm = this.form.value.letterForm.toLowerCase();
     this.pickedWord.word = this.pickedWord.word.toLowerCase();
     this.attempts = this.attempts + 1;
@@ -82,7 +94,7 @@ export class GameComponent implements OnInit {
         if (this.pickedWord.word[i] === this.form.value.letterForm)
           indices.push(i + 1);
           indices.forEach(element => {
-          this.encryptedWord = this.replaceAt(this.encryptedWord, element - 1, this.form.value.letterForm);
+          this.encryptedWord = this.gameCoreService.replaceAt(this.encryptedWord, element - 1, this.form.value.letterForm);
         });
       }
     } else if (this.pickedWord.word.toLowerCase() === this.form.value.letterForm) {
@@ -91,7 +103,7 @@ export class GameComponent implements OnInit {
     else {
       this.fails += 1;
     }
-    if (this.resultGameStatus == 'You win !' || this.resultGameStatus == 'You lose !') {
+    if (this.resultGameStatus() == 'You win !' || this.resultGameStatus() == 'You lose !') {
       this.form.disable();
     }
   }

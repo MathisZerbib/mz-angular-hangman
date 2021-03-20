@@ -2,16 +2,15 @@
   <div id="status">
       <p>Remaining tries: {{this.fails}}/6</p>
     </div>
-    <!-- <div *ngIf="!this.pickedWord.image">
-      <img *ngIf="resultGameStatus() === 'You win !'" src="../../assets/images/error-image.jpg"
-        onerror="this.src = '../../assets/images/error-image.jpg'" />
+    <div *ngIf="this.pickedWord ">
+      <img *ngIf="resultGameStatus() === 'You win !'" src="{{this.pickedWord.image}}"/>
     </div>
     <div *ngIf="!this.pickedWord">
       <img *ngIf="resultGameStatus() === 'You win !'" src="../../assets/images/error-image.jpg" />
     </div>
     <img *ngIf="resultGameStatus() === 'You lose !'" src="../../assets/images/youloose.jpg"
       onerror="this.src = '../../assets/images/error-image.jpg'" />
-  -->
+ 
     <span id="hint">{{this.encryptedWord}}</span> 
   <div id="wrapper-form">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -28,9 +27,9 @@
       <button mat-button type="submit" id="submit" (keyup.enter)="onSubmit()" [disabled]="!form.valid">Submit</button>
     </form>
   </div>
-  <span id="result">{{resultGameStatus}}</span>
+  <span id="result">{{resultGameStatus()}}</span>
   <div id="wrapper-result">
-    <button mat-button id="reset" *ngIf="isGameStopped" (click)="resetGame()">
+    <button mat-button id="reset" *ngIf="isGameStopped()" (click)="resetGame()">
       <mat-icon  aria-label="" aria-hidden="false">restart_alt</mat-icon>
       Reset Game
     </button>
