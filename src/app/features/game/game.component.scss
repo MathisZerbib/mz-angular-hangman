@@ -30,7 +30,7 @@ mat-label {
 
    p, mat-label, button, span {
     font-size: 24px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Roboto, Helvetica Neue", sans-serif;
    }
 
    mat-form-field {
@@ -41,6 +41,10 @@ mat-label {
     width: 40px;
     height: 40px;
    }
+
+.img-container {
+height: 95px;
+}
 img {
     display: block;
     max-width:230px;

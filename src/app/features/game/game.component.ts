@@ -26,6 +26,7 @@ export class GameComponent implements OnInit {
     return this.fails >= 6 || this.encryptedWord.indexOf('_') === -1;
   }
   resultGameStatus = () => {
+    console.log('gamestatus image: ', this.pickedWord.image, 'status text:', this.pickedWord.word)
     return this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf('_') === -1 ? "You win !" : "";
   };
 

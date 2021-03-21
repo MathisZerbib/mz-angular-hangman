@@ -1,17 +1,12 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
   <div id="status">
       <p>Remaining tries: {{this.fails}}/6</p>
-    </div>
-    <div *ngIf="this.pickedWord ">
-      <img *ngIf="resultGameStatus() === 'You win !'" src="{{this.pickedWord.image}}"/>
-    </div>
-    <div *ngIf="!this.pickedWord">
-      <img *ngIf="resultGameStatus() === 'You win !'" src="../../assets/images/error-image.jpg" />
-    </div>
-    <img *ngIf="resultGameStatus() === 'You lose !'" src="../../assets/images/youloose.jpg"
-      onerror="this.src = '../../assets/images/error-image.jpg'" />
- 
-    <span id="hint">{{this.encryptedWord}}</span> 
+  </div>
+  <div class="img-container">
+    <img *ngIf="resultGameStatus() === 'You win !'" src="{{this.pickedWord.image}}" onerror="this.onerror=null;this.src='../../assets/images/error-image.jpg';"/>
+    <img *ngIf="resultGameStatus() === 'You lose !'" src="../../assets/images/youloose.jpg" />   
+  </div>
+ <span id="hint">{{this.encryptedWord}}</span> 
   <div id="wrapper-form">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <mat-label> Choose a letter or dare to find the whole word </mat-label>
@@ -35,9 +30,6 @@
     </button>
   </div>
 </div>
-
-
-
 
 <!-- <div id="container">
     <canvas id="hangman" width="180" height="250"></canvas>
