@@ -1,34 +1,23 @@
-import { Injectable } from '@angular/core';
 import { PickedWord } from 'src/app/shared/models/PickedWord.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class GameCoreService {
   pickedWord: PickedWord = {
     image: "",
     word: "",
   };
   encryptedWord: string = '';
-
-  isGameStopped = () => {
-    return this.fails >= 6 || this.encryptedWord.indexOf('_') === -1;
-  }
-  resultGameStatus = () => {
-    return this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf('_') === -1 ? "You win !" : "";
-  };
-
   attempts: number = 0;
   fails: number = 0;
-
-  // isGameStopped = this.fails >= 6 || this.encryptedWord.indexOf('_') === -1;
-  // resultGameStatus = this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf('_') === -1 ? "You win !" : "";
-
+  win: number = 0;
+  loose: number= 0;
   constructor() { }
 
   public initGame(words: Array<PickedWord>): PickedWord {
+    let tempWin;
     let i: number = this.getRandomInt(words.length);
     this.pickedWord = words[i];
+    tempWin = localStorage.getItem("ratio")?.toLocaleString()
+    this.win = parseInt(tempWin || '');
     console.log('Yay you\'re smart:', this.pickedWord.word)
     return this.pickedWord;
   }
@@ -60,22 +49,54 @@ export class GameCoreService {
     return this.pickedWord
   }
 
-
+  public getPickedWordImage(): string {
+    return this.pickedWord.image || ""
+  }
 
   public getAttempt(): number {
     return this.attempts;
 
   }
-  public setAttempt(): void {
-    this.attempts = this.attempts + 1;
+  public setAttempt(int: number): void {
+    if(int === 0) {
+      this.attempts = 0;
+    }
+    this.attempts = this.attempts + int;
   }
 
   public getFail(): number {
     return this.fails;
   }
 
-  public setFail(): void {
-    this.fails = this.fails + 1;
+  public setFail(int: number): void {
+    if(int === 0) {
+      this.fails = 0;
+    }
+    this.fails = this.fails + int;
+  }
+
+  public isGameStopped() {
+    return this.fails >= 6 || this.encryptedWord.indexOf('_') === -1;
+  }
+  public resultGameStatus() {
+    return this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf('_') === -1 ? "You win !" : "";
+  };
+
+  public getRatio() {
+    return localStorage.getItem('ratio')?.toString();
+  }
+
+  public setRatio() {
+    return localStorage.setItem('ratio', this.win.toFixed() )
+  }
+
+  public counterRatio() {
+    if (this.resultGameStatus() === 'You win !') {
+        this.win = this.win + 1;
+    }else {  
+        this.win = 0;
+      }
+    this.setRatio();
   }
 
 }

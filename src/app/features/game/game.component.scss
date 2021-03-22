@@ -26,12 +26,11 @@ mat-label {
   #hint {
     letter-spacing: 16px;
     font-size: 42px;
+    padding: 15px;
+    margin-bottom: 50px;
+
   }
 
-   p, mat-label, button, span {
-    font-size: 24px;
-    font-family: "Roboto, Helvetica Neue", sans-serif;
-   }
 
    mat-form-field {
        width: 225px;
