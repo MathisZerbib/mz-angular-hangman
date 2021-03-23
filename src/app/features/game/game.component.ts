@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
-import { shareReplay } from 'rxjs/operators';
 import { GameCoreService } from 'src/app/core/services/game-core/game-core.service';
 import { PickedWord } from 'src/app/shared/models/PickedWord.model';
 import { ApiService } from '../../core/services/api/api.service';
@@ -12,25 +11,8 @@ import { ApiService } from '../../core/services/api/api.service';
   providers: [GameCoreService]
 })
 export class GameComponent implements OnInit {
-  // pickedWord: PickedWord = {
-  //   image: "",
-  //   word: "",
-  // };
   words: Array<PickedWord> = [];
   letterForm: string = "";
-
-  // encryptedWord: string = "";
-  // wordArray: any = localStorage.getItem('game-json');
-  
-  // isGameStopped = () => {
-  //   return this.fails >= 6 || this.gameCore.getEncryptedWord();.indexOf('_') === -1;
-  // }
-  // resultGameStatus = () => {
-  //   return this.fails >= 6 ? "You lose !" : this.gameCore.getEncryptedWord();.indexOf('_') === -1 ? "You win !" : "";
-  // };
-
-  // data$: any;
-
   
 form = this.fb.group({
     "letterForm": new FormControl('', [Validators.minLength(1), Validators.required])
@@ -40,7 +22,7 @@ form = this.fb.group({
    }
   ngOnInit() {
     /* Call Api from service  */
-    this.apiService.getwordList("https://technical-exercice-stack-labs.s3.eu-west-3.amazonaws.com/hangman/technos/list").subscribe(response => {
+    this.apiService.getWordList("https://technical-exercice-stack-labs.s3.eu-west-3.amazonaws.com/hangman/technos/list").subscribe(response => {
       this.words = response;
       this.gameCore.initGame(this.words);
       this.gameCore.setEncryptWord();
@@ -48,8 +30,6 @@ form = this.fb.group({
       this.gameCore.getEncryptedWord();
     });
   };
-
-
 
 public getRatio(){
   return this.gameCore.getRatio();
@@ -90,7 +70,6 @@ public getRatio(){
    return this.gameCore.fails
  }
 
-
  /* Func reset the form & game value & game status */
   public resetGame() {
     this.gameCore.initGame(this.words);
@@ -101,13 +80,6 @@ public getRatio(){
     this.form.reset();
     this.form.enable();
   }
-
-  /*Func to replace every letter occurencies in a word*/
-  public replaceAt(str: string, index: number, chr: string): string {
-    if (index > str.length - 1) return str;
-    return str.substr(0, index) + chr + str.substr(index + 1);
-  }
-
 
   /* Guessing the letter or word */
   private guessLetter() {
