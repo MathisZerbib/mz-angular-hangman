@@ -1,45 +1,41 @@
-
-
 mat-label {
     padding: 5px;
 }
 
+#container, .buttons {
+  text-align: center;
+  margin: 0px auto;
+}
+
+button {
+  padding: 10px;
+  margin: 10px;
+  border: none;
+  font-size: 1.4em;
+  cursor: pointer;
+}
+
+canvas {
+  text-align: center;
+}
+
+#hint {
+  letter-spacing: 16px;
+  font-size: 42px;
+  padding: 15px;
+  margin-bottom: 50px;
+
+}
 
 
-  #container, .buttons {
-    text-align: center;
-    margin: 0px auto;
-  }
-  
-  button {
-    padding: 10px;
-    margin: 10px;
-    border: none;
-    font-size: 1.4em;
-    cursor: pointer;
-  }
-  
-  canvas {
-    text-align: center;
-  }
-  
-  #hint {
-    letter-spacing: 16px;
-    font-size: 42px;
-    padding: 15px;
-    margin-bottom: 50px;
+mat-form-field {
+    width: 225px;
+}
 
-  }
-
-
-   mat-form-field {
-       width: 225px;
-   }
-
-   #clear {
-    width: 40px;
-    height: 40px;
-   }
+#clear {
+width: 40px;
+height: 40px;
+}
 
 .img-container {
 height: 95px;
