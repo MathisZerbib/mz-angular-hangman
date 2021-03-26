@@ -1,9 +1,12 @@
 <mat-card class="mat-elevation-z5">
+    <div class="wrapper-rules" fxLayout="column" fxLayoutAlign="space-evenly center">
     <mat-card-header>
-        <mat-card-title>Hangman Game</mat-card-title>
-        <mat-card-subtitle>Rules</mat-card-subtitle>
+        <mat-card-title>The Hangman</mat-card-title>
+        <mat-card-subtitle>Rules of the game</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+        <img  src="https://ccrs2006.github.io/Hangman-Game/assets/images2/logo.png" />
+
         <mat-list role="list">
             <mat-list-item role="listitem">You have 6 wrong guess max</mat-list-item>
             <mat-list-item role="listitem">You can type letter by letter or type the whole word to guess it
@@ -13,4 +16,5 @@
     <mat-card-actions>
         <button mat-flat-button color="primary" routerLink="../game" routerLinkActive="active">Launch game</button>
     </mat-card-actions>
+</div>
 </mat-card>

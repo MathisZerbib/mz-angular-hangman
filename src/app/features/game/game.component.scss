@@ -1,46 +1,46 @@
-
-
 mat-label {
     padding: 5px;
 }
 
+#container, .buttons {
+  text-align: center;
+  margin: 0px auto;
+}
+
+button {
+  padding: 10px;
+  margin: 10px;
+  border: none;
+  font-size: 1.4em;
+  cursor: pointer;
+}
+
+canvas {
+  text-align: center;
+}
+
+#hint {
+  letter-spacing: 16px;
+  font-size: 42px;
+  padding: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+
+}
 
 
-  #container, .buttons {
-    text-align: center;
-    margin: 0px auto;
-  }
-  
-  button {
-    padding: 10px;
-    margin: 10px;
-    border: none;
-    font-size: 1.4em;
-    cursor: pointer;
-  }
-  
-  canvas {
-    text-align: center;
-  }
-  
-  #hint {
-    letter-spacing: 16px;
-    font-size: 42px;
-  }
+mat-form-field {
+    width: 225px;
+}
 
-   p, mat-label, button, span {
-    font-size: 24px;
-    font-family: 'Courier New', Courier, monospace;
-   }
+#clear {
+width: 40px;
+height: 40px;
+}
 
-   mat-form-field {
-       width: 225px;
-   }
-
-   #clear {
-    width: 40px;
-    height: 40px;
-   }
+.img-container {
+height: 95px;
+}
 img {
     display: block;
     max-width:230px;
@@ -78,4 +78,20 @@ img {
     0% {opacity:0;}
     100% {opacity:1;}
   }
+
+  canvas {
+    margin: 15px
+  }
   
+#warn-error {
+  color: red; 
+  font-size: 12px;
+}
+  
+#wrapper-alphabet {
+  margin:15px auto;
+  padding:0;
+  max-width:900px;
+  text-align-last: center;
+}
+
