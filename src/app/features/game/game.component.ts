@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { GameCoreService } from 'src/app/core/services/game-core/game-core.service';
 import { PickedWord } from 'src/app/shared/models/PickedWord.model';
@@ -10,16 +11,43 @@ import { ApiService } from '../../core/services/api/api.service';
   styleUrls: ['./game.component.scss'],
   providers: [GameCoreService]
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, AfterViewInit {
   words: Array<PickedWord> = [];
   letterForm: string = "";
-  
-form = this.fb.group({
+  alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+  'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+  't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+  cx: any;
+  canvas = { width: 150, height: 250 };
+
+  form = this.fb.group({
     "letterForm": new FormControl('', [Validators.minLength(1), Validators.required])
   });
-  constructor(private apiService: ApiService,private gameCore: GameCoreService, private fb: FormBuilder) {
 
-   }
+  @ViewChild("myCanvas", { static: false })
+  myCanvas!: ElementRef;
+  letters = document.createElement('div');
+
+  constructor(private apiService: ApiService,private gameCore: GameCoreService, private fb: FormBuilder, private el: ElementRef) {}
+   
+  // create alphabet ul
+    public createAlphabet() {
+     
+      for (var i = 0; i < this.alphabet.length; i++) {
+        this.letters.id = 'alphabet';
+        var list = document.createElement('span');
+        list.id = 'letter-'+i;
+        list.style.margin = '5px';
+        list.style.fontSize = '25px';     
+        list.innerHTML = this.alphabet[i];
+        document.querySelector("#wrapper-alphabet")!.appendChild(this.letters);
+        this.letters.appendChild(list);
+      }
+    }
+
+
+    
   ngOnInit() {
     /* Call Api from service  */
     this.apiService.getWordList("https://technical-exercice-stack-labs.s3.eu-west-3.amazonaws.com/hangman/technos/list").subscribe(response => {
@@ -27,21 +55,54 @@ form = this.fb.group({
       this.gameCore.initGame(this.words);
       this.gameCore.setEncryptWord();
       this.gameCore.getPickedWord();
-      this.gameCore.getEncryptedWord();
+      this.gameCore.getEncryptedWord();    
+      this.createAlphabet();
     });
   };
 
-public getRatio(){
-  return this.gameCore.getRatio();
-}
-  /* Reactive from  */
 
-  public onSubmit() {
-    if (this.guessLetter) {
-      this.guessLetter()
-      this.form.reset()
+
+
+  public alphabetPosition(text: string): number {
+    var result = "";
+    for (var i = 0; i < text.length; i++) {
+      var code = text.toUpperCase().charCodeAt(i)
+      if (code > 64 && code < 91) result += (code - 64) + " ";
     }
+    console.log( parseInt(result.slice(0, result.length - 1))  -1);
+    return parseInt(result.slice(0, result.length - 1)) -1;
   }
+
+
+  public setColorLetter(int: number, color: string) {
+    // document.querySelector('#letter-'+int)!.style.backgroundColor = 'red';
+    let letterPicked = document.querySelector<HTMLInputElement>('#letter-'+int);
+    letterPicked!.style.color = color;
+    letterPicked!.style.fontWeight = "bold";
+
+    }
+
+    public resetColorLetter() {
+      for (var i = 0; i < this.alphabet.length; i++) {
+      let letterPicked = document.querySelector<HTMLInputElement>('#letter-'+i);
+
+      letterPicked!.style.color = '';
+      letterPicked!.style.fontWeight = '';
+      
+      }
+    }
+
+  public getRatio(){
+    return this.gameCore.getRatio();
+  }
+    /* Reactive from  */
+  
+    public onSubmit() {
+      if (this.guessLetter) {
+        this.guessLetter()
+        this.form.reset()
+      }
+    }
 
   /* get game result from service  */
 
@@ -79,6 +140,8 @@ public getRatio(){
     this.gameCore.setAttempt(0);
     this.form.reset();
     this.form.enable();
+    this.cx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.resetColorLetter();
   }
 
   /* Guessing the letter or word */
@@ -108,18 +171,92 @@ public getRatio(){
       /* If user find the whole word */
     } else if (this.gameCore.pickedWord.word === this.form.value.letterForm) {
       this.gameCore.encryptedWord = this.gameCore.pickedWord.word;
+      this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'green');
     }
     else {
       /*Set incremental fails */
       this.gameCore.setFail(1);
       this.gameCore.getFail();
+      this.Draw(this.gameCore.getFail())
+      this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'red');
     }
     /* SetGamestatus disable form if win or loose */
     if (this.gameCore.resultGameStatus() === 'You win !' || this.gameCore.resultGameStatus() === 'You lose !') {
     this.gameCore.counterRatio();
-    
       this.form.disable();
     }
+  }
+
+
+  /* Draw hangman if the user fails */
+  public Draw = (int: number) => {
+    switch (int) {
+       case 1 :
+         this.cx.strokeStyle = '#444';
+         this.cx.lineWidth = 10; 
+         this.cx.beginPath();
+         this.cx.moveTo(175, 225);
+         this.cx.lineTo(5, 225);
+         this.cx.moveTo(40, 225);
+         this.cx.lineTo(25, 5);
+         this.cx.lineTo(100, 5);
+         this.cx.lineTo(100, 25);
+         this.cx.stroke();
+         break;
+ 
+       case 2:
+         this.cx.lineWidth = 5;
+         this.cx.beginPath();
+         this.cx.arc(100, 50, 25, 0, Math.PI*2, true);
+         this.cx.closePath();
+         this.cx.stroke();
+         break;
+       
+       case 3:
+         this.cx.beginPath();
+         this.cx.moveTo(100, 75);
+         this.cx.lineTo(100, 140);
+         this.cx.stroke();
+         break;
+ 
+       case 4:
+         this.cx.beginPath();
+         this.cx.moveTo(100, 85);
+         this.cx.lineTo(60, 100);
+         this.cx.stroke();
+         this.cx.beginPath();
+         this.cx.moveTo(100, 85);
+         this.cx.lineTo(140, 100);
+         this.cx.stroke();
+         break;
+ 
+       case 5:
+         this.cx.beginPath();
+         this.cx.moveTo(100, 140);
+         this.cx.lineTo(80, 190);
+         this.cx.stroke();
+          this.cx.beginPath();
+          this.cx.moveTo(82, 190);
+          this.cx.lineTo(70, 185);
+          this.cx.stroke();
+       break;
+ 
+       case 6:
+         this.cx.beginPath();
+         this.cx.moveTo(100, 140);
+         this.cx.lineTo(125, 190);
+         this.cx.stroke();
+          this.cx.beginPath();
+          this.cx.moveTo(122, 190);
+          this.cx.lineTo(135, 185);
+          this.cx.stroke();
+       break;
+    } 
+ }
+ 
+  ngAfterViewInit(): void {
+    const canvasEl: HTMLCanvasElement = this.myCanvas.nativeElement;
+    this.cx = canvasEl.getContext("2d");
   }
 
 }

@@ -23,7 +23,8 @@ canvas {
   letter-spacing: 16px;
   font-size: 42px;
   padding: 15px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  text-align: center;
 
 }
 
@@ -77,4 +78,17 @@ img {
     0% {opacity:0;}
     100% {opacity:1;}
   }
+
+  canvas {
+    margin: 15px
+  }
   
+
+  
+#wrapper-alphabet {
+  margin:15px auto;
+  padding:0;
+  max-width:900px;
+  text-align-last: center;
+}
+

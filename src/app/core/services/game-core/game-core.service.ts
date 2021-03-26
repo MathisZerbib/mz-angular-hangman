@@ -1,11 +1,11 @@
-import { PickedWord } from 'src/app/shared/models/PickedWord.model';
+import { PickedWord } from "src/app/shared/models/PickedWord.model";
 
 export class GameCoreService {
   pickedWord: PickedWord = {
     image: "",
     word: "",
   };
-  encryptedWord: string = '';
+  encryptedWord: string = "";
   attempts: number = 0;
   fails: number = 0;
   win: number = 0;
@@ -24,13 +24,13 @@ export class GameCoreService {
     let i: number = this.getRandomInt(words.length);
     this.pickedWord = words[i];
     tempWin = localStorage.getItem("ratio")?.toLocaleString() || "";
-    localStorage.setItem('ratio', tempWin || "")
-    this.win = parseInt(tempWin || '');
-    if (!localStorage.getItem('ratio')) {
+    localStorage.setItem("ratio", tempWin || "")
+    this.win = parseInt(tempWin || "");
+    if (!localStorage.getItem("ratio")) {
       this.win = 0;
-      localStorage.setItem('ratio', '0');
+      localStorage.setItem("ratio", "0");
     }
-    console.log('Yay you\'re smart but it gonna be less fun if you don\'t close the dev tools ;) :', this.pickedWord.word)
+    console.log("Yay you\"re smart but it gonna be less fun if you don\"t close the dev tools ;) :", this.pickedWord.word)
     return this.pickedWord;
   }
 
@@ -47,7 +47,7 @@ export class GameCoreService {
   /* return word encrypted  */
 
   public setEncryptWord(): string {
-    this.encryptedWord = this.pickedWord.word.replace(/[a-zA-Z]/g, '_');
+    this.encryptedWord = this.pickedWord.word.replace(/[a-zA-Z]/g, "_");
     return this.encryptedWord;
   }
 
@@ -116,27 +116,27 @@ export class GameCoreService {
   /* return state of the game  */
 
   public isGameStopped() {
-    return this.fails >= 6 || this.encryptedWord.indexOf('_') === -1;
+    return this.fails >= 6 || this.encryptedWord.indexOf("_") === -1;
   }
   /* return status of the game  */
 
   public resultGameStatus() {
-    return this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf('_') === -1 ? "You win !" : "";
+    return this.fails >= 6 ? "You lose !" : this.encryptedWord.indexOf("_") === -1 ? "You win !" : "";
   };
   /* get current max win in a row  */
 
   public getRatio() {
-    return localStorage.getItem('ratio')?.toString();
+    return localStorage.getItem("ratio")?.toString();
   }
 
   /* Set max win in a row  */
   public setRatio() {
-    return localStorage.setItem('ratio', this.win.toFixed())
+    return localStorage.setItem("ratio", this.win.toFixed())
   }
 
   /* Set Ratio On win / Loose */
   public counterRatio() {
-    if (this.resultGameStatus() === 'You win !') {
+    if (this.resultGameStatus() === "You win !") {
       this.win = this.win + 1;
     } else {
       this.win = 0;
