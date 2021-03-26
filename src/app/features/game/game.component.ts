@@ -69,13 +69,11 @@ export class GameComponent implements OnInit, AfterViewInit {
       var code = text.toUpperCase().charCodeAt(i)
       if (code > 64 && code < 91) result += (code - 64) + " ";
     }
-    console.log( parseInt(result.slice(0, result.length - 1))  -1);
     return parseInt(result.slice(0, result.length - 1)) -1;
   }
 
 
   public setColorLetter(int: number, color: string) {
-    // document.querySelector('#letter-'+int)!.style.backgroundColor = 'red';
     let letterPicked = document.querySelector<HTMLInputElement>('#letter-'+int);
     letterPicked!.style.color = color;
     letterPicked!.style.fontWeight = "bold";
@@ -85,7 +83,6 @@ export class GameComponent implements OnInit, AfterViewInit {
     public resetColorLetter() {
       for (var i = 0; i < this.alphabet.length; i++) {
       let letterPicked = document.querySelector<HTMLInputElement>('#letter-'+i);
-
       letterPicked!.style.color = '';
       letterPicked!.style.fontWeight = '';
       
@@ -166,19 +163,21 @@ export class GameComponent implements OnInit, AfterViewInit {
           indices.push(i + 1);
           indices.forEach(element => {
           this.gameCore.encryptedWord = this.gameCore.replaceAt(this.gameCore.encryptedWord, element - 1, this.form.value.letterForm);
+          this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'green');
         });
       }
       /* If user find the whole word */
     } else if (this.gameCore.pickedWord.word === this.form.value.letterForm) {
       this.gameCore.encryptedWord = this.gameCore.pickedWord.word;
-      this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'green');
     }
     else {
       /*Set incremental fails */
       this.gameCore.setFail(1);
       this.gameCore.getFail();
       this.Draw(this.gameCore.getFail())
-      this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'red');
+      if(this.form.value.letterForm.length === 1) {
+        this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'red');
+      }
     }
     /* SetGamestatus disable form if win or loose */
     if (this.gameCore.resultGameStatus() === 'You win !' || this.gameCore.resultGameStatus() === 'You lose !') {
