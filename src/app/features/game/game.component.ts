@@ -32,16 +32,7 @@ export class GameComponent implements OnInit, AfterViewInit {
 
   constructor(private apiService: ApiService, private gameCore: GameCoreService, private fb: FormBuilder, private el: ElementRef) { }
 
-
-  shouldShowTitleRequiredError() {
-
-    const letter = this.form.controls.letterForm;
-
-    return letter.touched && letter.hasError('required');
-
-}
-
-  // create alphabet ul
+  // create alphabet
   public createAlphabet() {
 
     for (let i = 0; i < this.alphabet.length; i++) {
@@ -50,7 +41,12 @@ export class GameComponent implements OnInit, AfterViewInit {
       list.id = 'letter-' + i;
       list.style.margin = '5px';
       list.style.fontSize = '25px';
+      list.style.cursor = 'pointer'
       list.innerHTML = this.alphabet[i];
+      list.onclick = () => {
+        this.form.controls['letterForm'].setValue(list.innerHTML); 
+        this.onSubmit();
+      }
       document.querySelector("#wrapper-alphabet")!.appendChild(this.letters);
       this.letters.appendChild(list);
     }
@@ -70,6 +66,7 @@ export class GameComponent implements OnInit, AfterViewInit {
     });
   };
 
+  /* create canvas  */
 
   ngAfterViewInit(): void {
     const canvasEl: HTMLCanvasElement = this.myCanvas.nativeElement;
@@ -77,6 +74,7 @@ export class GameComponent implements OnInit, AfterViewInit {
 
   }
 
+  /* Get alphabet position on letterForm  */
 
   public alphabetPosition(text: string): number {
     let result = "";
@@ -87,6 +85,8 @@ export class GameComponent implements OnInit, AfterViewInit {
     return parseInt(result.slice(0, result.length - 1)) - 1;
   }
 
+    /* set letter style  */
+
 
   public setColorLetter(int: number, color: string) {
     let letterPicked = document.querySelector<HTMLInputElement>('#letter-' + int);
@@ -94,6 +94,8 @@ export class GameComponent implements OnInit, AfterViewInit {
     letterPicked!.style.fontWeight = "bold";
 
   }
+  
+  /* reset letter style  */
 
   public resetColorLetter() {
     for (let i = 0; i < this.alphabet.length; i++) {
@@ -105,6 +107,9 @@ export class GameComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+  
+  /* get game result from win and looses  */
   public getRatio() {
     return this.gameCore.getRatio();
   }

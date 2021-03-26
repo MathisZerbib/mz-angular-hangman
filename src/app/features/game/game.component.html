@@ -10,7 +10,6 @@
     <img *ngIf="getResultStatus() === 'You win !'" src="{{getPickedWordImage()}}"
       onerror="this.onerror=null;this.src='../../assets/images/error-image.jpg';" />
     <img *ngIf="getResultStatus() === 'You lose !'" src="../../assets/images/youloose.jpg" />
-
   </div>
 
   <span id="hint">{{getEncryptedWord()}}</span>
@@ -21,13 +20,8 @@
       <div id="wrapper-form">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <mat-form-field>
-            <input matInput type="text" placeholder='letter or word' formControlName="letterForm" minlength="1" autocomplete="off">
-           
+            <input matInput type="text" placeholder='letter or word' formControlName="letterForm" minlength="1" autocomplete="off">  
           </mat-form-field>
-           
-
-
-
           <button mat-button type="submit" id="submit" (keyup.enter)="onSubmit()"
             [disabled]="!form.valid">Submit</button> 
             <p id="warn-error" *ngIf="form.controls['letterForm'].errors && this.form.value.letterForm">
@@ -45,16 +39,8 @@
     </mat-card-content>
   </mat-card>
   <div id='wrapper-alphabet'>
-
   </div>
   <canvas #myCanvas width="150" height="250">
     Your browser does not support the canvas element.
   </canvas>
 </div>
-
-
-<!-- 
-
-
-<div class="alphabet">
-</div>  -->
