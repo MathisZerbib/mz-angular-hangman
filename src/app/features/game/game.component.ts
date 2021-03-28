@@ -15,9 +15,6 @@ export class GameComponent implements OnInit, AfterViewInit {
   urlStackLabs: string = "https://technical-exercice-stack-labs.s3.eu-west-3.amazonaws.com/hangman/technos/list";
   words: Array<PickedWord> = [];
   letterForm: string = "";
-  alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-    'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-    't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
   cx: CanvasRenderingContext2D | null | undefined ;
   canvas = { width: 150, height: 250 };
@@ -53,40 +50,6 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.cx = canvasEl.getContext("2d");
 
   }
-
-  /* Get alphabet position on letterForm  */
-
-  public alphabetPosition(text: string): number {
-    let result = "";
-    for (let i = 0; i < text.length; i++) {
-      let code = text.toUpperCase().charCodeAt(i)
-      if (code > 64 && code < 91) result += (code - 64) + " ";
-    }
-    return parseInt(result.slice(0, result.length - 1)) - 1;
-  }
-
-    /* set letter style  */
-
-
-  public setColorLetter(int: number, color: string) {
-    let letterPicked = document.querySelector<HTMLInputElement>('#letter-' + int);
-    letterPicked!.style.color = color;
-    letterPicked!.style.fontWeight = "bold";
-
-  }
-  
-  /* reset letter style  */
-
-  public resetColorLetter() {
-    for (let i = 0; i < this.alphabet.length; i++) {
-      let letterPicked = document.querySelector<HTMLInputElement>('#letter-' + i);
-      if (letterPicked) {
-        letterPicked.style.color = '';
-        letterPicked.style.fontWeight = '';
-      }
-    }
-  }
-
 
   
   /* get game result from win and looses  */
@@ -138,7 +101,6 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.gameCore.setAttempt(0);
     this.form.reset();
     this.form.enable();
-    this.resetColorLetter();
     if(this.cx)
     this.cx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
@@ -165,7 +127,6 @@ export class GameComponent implements OnInit, AfterViewInit {
           indices.push(i + 1);
         indices.forEach(element => {
           this.gameCore.encryptedWord = this.gameCore.replaceAt(this.gameCore.encryptedWord, element - 1, this.form.value.letterForm);
-          this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'green');
         });
       }
       /* If user find the whole word */
@@ -177,9 +138,6 @@ export class GameComponent implements OnInit, AfterViewInit {
       this.gameCore.setFail(1);
       this.gameCore.getFail();
       this.Draw(this.gameCore.getFail())
-      if (this.form.value.letterForm.length === 1) {
-        this.setColorLetter(this.alphabetPosition(this.form.value.letterForm), 'red');
-      }
     }
     /* SetGamestatus disable form if win or loose */
     if (this.gameCore.resultGameStatus() === 'You win !' || this.gameCore.resultGameStatus() === 'You lose !') {
