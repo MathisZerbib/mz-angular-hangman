@@ -32,25 +32,6 @@ export class GameComponent implements OnInit, AfterViewInit {
 
   constructor(private apiService: ApiService, private gameCore: GameCoreService, private fb: FormBuilder, private el: ElementRef) { }
 
-  // create alphabet
-  public createAlphabet() {
-
-    for (let i = 0; i < this.alphabet.length; i++) {
-      this.letters.id = 'alphabet';
-      let list = document.createElement('span');
-      list.id = 'letter-' + i;
-      list.style.margin = '5px';
-      list.style.fontSize = '25px';
-      list.style.cursor = 'pointer'
-      list.innerHTML = this.alphabet[i];
-      list.onclick = () => {
-        this.form.controls['letterForm'].setValue(list.innerHTML); 
-        this.onSubmit();
-      }
-      document.querySelector("#wrapper-alphabet")!.appendChild(this.letters);
-      this.letters.appendChild(list);
-    }
-  }
 
 
 
@@ -62,7 +43,6 @@ export class GameComponent implements OnInit, AfterViewInit {
       this.gameCore.setEncryptWord();
       this.gameCore.getPickedWord();
       this.gameCore.getEncryptedWord();
-      this.createAlphabet();
     });
   };
 
